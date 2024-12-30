@@ -71,8 +71,39 @@ static void __attribute__((unused)) ESKY150V2_send_packet()
 	for(uint8_t i=0;i<16;i++)
 	{
 		uint16_t channel=convert_channel_16b_limit(CH_TAER[i],200,1000);
-		packet[4+2*i] = channel;
-		packet[5+2*i] = channel>>8;
+		/*packet[4+2*i] = channel;
+		packet[5+2*i] = channel>>8;*/
+
+		if((i<4)||(i>6))
+		{
+			packet[4+2*i] = channel&0X000F;
+			packet[5+2*i] = channel>>8;
+		}
+		else
+		{
+			if(i=4)
+			{
+				packet[4] = packet[4]|(channel&0X0080);
+			}
+			else
+			{
+				if(i=6)
+				{
+					packet[4] = packet[4]|(channel&0X0030);
+					
+				}
+				else
+				{
+					if(i=5)
+					{
+						packet[6] = packet[6]|(channel&0X00F0);
+						packet[8] = packet[8]|(channel&0X00F0);
+						packet[10] = packet[10]|(channel&0X00F0);
+					}
+				}
+			}
+			
+		}
 	}
 	NRF250K_WritePayload(packet, ESKY150V2_PAYLOADSIZE);
 }
