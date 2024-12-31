@@ -71,9 +71,9 @@ static void __attribute__((unused)) ESKY150V2_send_packet()
 	for(uint8_t i=0;i<16;i++)
 	{
 		uint16_t channel=convert_channel_16b_limit(CH_TAER[i],200,1000);
-		/*packet[4+2*i] = channel;
-		packet[5+2*i] = channel>>8;*/
-
+		packet[4+2*i] = channel;
+		packet[5+2*i] = channel>>8;
+/* 
 		if(i<4)
 		{
 			packet[4+2*i] = channel&0X000F;
@@ -112,7 +112,7 @@ static void __attribute__((unused)) ESKY150V2_send_packet()
 				}
 			}
 			
-		}
+		} */
 	}
 	NRF250K_WritePayload(packet, ESKY150V2_PAYLOADSIZE);
 }
